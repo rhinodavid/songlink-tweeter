@@ -1,5 +1,16 @@
 const Twit = require('twit');
+const winston = require('winston');
 require('dotenv').load();
+
+winston.add(
+  winston.transports.File, {
+    filename: 'stream.log',
+    level: 'info',
+    json: false,
+    eol: 'n',
+    timestamp: true
+  }
+);
 
 const T = new Twit({
   consumer_key: process.env.TWITTER_CONSUMER_KEY, // eslint-disable-line
@@ -7,6 +18,8 @@ const T = new Twit({
   access_token: process.env.TWITTER_ACCESS_TOKEN, // eslint-disable-line
   access_token_secret: process.env.TWITTER_TOKEN_SECRET // eslint-disable-line
 });
+
+
 
 const startTime = Date.now();
 let tweetCount = 0;
@@ -35,8 +48,10 @@ stream.on('tweet', tweet => {
 });
 
 stream.on('error', error => {
-  console.log('ERROR:', error.message);
-  console.log('Status:', error.statusCode);
+  winston.log('error', 'Stream error:');
+  winston.log('error', 'Message:', error.message);
+  winston.log('error', 'Status code:', error.statusCode);
+  console.log('Stream error. See logs');
 });
 
 stream.on('disconnect', disconnectMessage => {
@@ -44,5 +59,6 @@ stream.on('disconnect', disconnectMessage => {
 });
 
 stream.on('limit', function (limitMessage) {
-  console.log('Limited with message:', limitMessage);
+  winston.log('error', 'Rate limited with message:', limitMessage);
+  console.log('Rate limited with message:', limitMessage);
 });
