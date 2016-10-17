@@ -15,7 +15,8 @@
   "homepage": "https://github.com/rhinodavid/2016-09-mvp#readme",
   "dependencies": {
     "dotenv": "^2.0.0",
-    "twit": "^2.2.5"
+    "twit": "^2.2.5",
+    "winston": "^2.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
