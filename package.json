@@ -14,6 +14,7 @@
   "license": "ISC",
   "homepage": "https://github.com/rhinodavid/2016-09-mvp#readme",
   "dependencies": {
+    "dotenv": "^2.0.0",
     "twit": "^2.2.5"
   },
   "devDependencies": {
