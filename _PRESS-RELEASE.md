@@ -1,4 +1,4 @@
-# Project Name #
+# Songlink Tweeter #
 
 <!-- 
 > This material was originally posted [here](http://www.quora.com/What-is-Amazons-approach-to-product-development-and-product-management). It is reproduced here for posterities sake.
@@ -20,25 +20,25 @@ Once the project moves into development, the press release can be used as a touc
   > Name the product in a way the reader (i.e. your target customers) will understand.
 
 ## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  > The twitter bot that gives eveyone access to your songs.
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > The Songlink service makes shareable links from Spotify and Google Music urls. It allows people that subscribe to a different music service to listen to the song you've shared. The Songlink Tweeter searches Twitter for Spotify and Google Music shares and Tweets back a Songlink link so subscribers to other services can listen as well.
 
 ## Problem ##
-  > Describe the problem your product solves.
+  > Songlink is a great product but it isn't well known, and even if you know about it requires an extra step to share music. You have to copy the link from your service, paste it into Songlink, then share the Songlink url.
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+  > The Songlink Tweeter cuts out the middle step. Just Tweet your Spotify or Google Music URL and the Songlink Tweeter will generate the Songlink and reply to your Tweet.
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  > Songlink Tweeter makes it super simple to share your favorite music with everyone.
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+  > Songlink Tweeter couldn't be more simple to use! Just Tweet a Spotify or Google Music link -- that's it! As long as your Tweets aren't protected, Songlink Tweeter will generate a Songlink for you.
 
 ## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  > I loved the idea of using Songlink, but the extra step of going to their website wasn't worth the trouble. Now I just Tweet my songs link I normally would and then Retweet Songlink Tweeter's reply.
 
 ## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+  > Try out Songlink Tweeter today! Tweet a public Tweet containing a Spotify or Google Music link and wait for Songlink Tweeter to do the rest.
