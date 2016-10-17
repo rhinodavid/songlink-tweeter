@@ -1,0 +1,23 @@
+{
+  "name": "songlink-tweeter",
+  "version": "0.0.1",
+  "description": "Songlink Twitter Bot",
+  "main": "app.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhinodavid/2016-09-mvp.git"
+  },
+  "author": "David Walsh",
+  "license": "ISC",
+  "homepage": "https://github.com/rhinodavid/2016-09-mvp#readme",
+  "dependencies": {
+    "twit": "^2.2.5"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2"
+  }
+}
