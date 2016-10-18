@@ -1,5 +1,6 @@
 .env
 *.log
+*.sqlite
 ### node etc ###
 
 # Logs
