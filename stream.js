@@ -2,15 +2,20 @@ const Twit = require('twit');
 const winston = require('winston');
 require('dotenv').load();
 
+const enqueueTweet = require('./streamHelpers').enqueueTweet;
+
 winston.add(
   winston.transports.File, {
     filename: 'stream.log',
     level: 'info',
     json: false,
-    eol: 'n',
+    eol: '\n',
     timestamp: true
   }
 );
+
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {timestamp: true});
 
 const T = new Twit({
   consumer_key: process.env.TWITTER_CONSUMER_KEY, // eslint-disable-line
@@ -31,34 +36,23 @@ const stream = T.stream('statuses/filter', {
 });
 
 stream.on('connected', response => {
-  console.log('Connected to statuses stream');
+  winston.log('info', 'Connected to statuses stream');
 });
 
 stream.on('tweet', tweet => {
-  if (tweet.retweeted_status === undefined) {
-
-    tweetCount++;
-
-    console.log('TWEET ID: ', tweet.id_str);
-    console.log(tweet.text);
-    console.log(tweet.entities.urls);
-    console.log('Tweet rate (T/M):', tweetCount / ((Date.now() - startTime) / 60000));
-    console.log('\n\n\n');
-  }
+  enqueueTweet(tweet);
 });
 
 stream.on('error', error => {
   winston.log('error', 'Stream error:');
   winston.log('error', 'Message:', error.message);
   winston.log('error', 'Status code:', error.statusCode);
-  console.log('Stream error. See logs');
 });
 
 stream.on('disconnect', disconnectMessage => {
-  console.log('Disconnected with message:', disconnectMessage);
+  winston.log('info', 'Disconnected with message:', disconnectMessage);
 });
 
 stream.on('limit', function (limitMessage) {
   winston.log('error', 'Rate limited with message:', limitMessage);
-  console.log('Rate limited with message:', limitMessage);
 });
