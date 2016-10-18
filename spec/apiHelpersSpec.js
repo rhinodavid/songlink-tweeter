@@ -1,9 +1,51 @@
 const expect = require('chai').expect;
+const Tweet = require('../db/db').Tweet;
+const getSpotifyId = require('../helpers/apiHelpers').getSpotifyId;
+const getSonglinkForSpotify = require('../helpers/apiHelpers').getSonglinkForSpotify;
+const postResponseTweet = require('../helpers/apiHelpers').postResponseTweet;
 const nock = require('nock');
 
-const postResponse = require('../tweeter').postResponse;
-
 nock.cleanAll();
+
+describe ('getSpotifyId', () => {
+  it('should return the id from a Spotify url', () => {
+    const url = 'https://open.spotify.com/track/20Qg2T8o4dobtSmyqxmx5n';
+    expect(getSpotifyId(url)).to.equal('20Qg2T8o4dobtSmyqxmx5n');
+  });
+});
+
+describe('getSonglinkForSpotify', () => {
+
+  before(() => {
+    nock('http://www.songl.ink')
+      .post('/create', {
+        'source': 'spotify',
+        'source_id': '20Qg2T8o4dobtSmyqxmx5n'
+      })
+      .reply(200, {
+        'album_art': 'https://i.scdn.co/image/d7e269f8d44be624f332e640a771c3041dc1d782',
+        'album_title': 'I Missing You',
+        'artist': 'Saibot',
+        'share_link': 'http://songl.ink/2aa10',
+        'source': 'spotify',
+        'source_id': '20Qg2T8o4dobtSmyqxmx5n',
+        'title': 'I Missing You'
+      });
+  });
+
+  it('should return songlink', (done) => {
+    const id = '20Qg2T8o4dobtSmyqxmx5n';
+    getSonglinkForSpotify(id)
+      .then(songlink => {
+        expect(/http:\/\/songl\.ink\/\w{3,8}/.test(songlink.share_link)).to.equal(true);
+        done();
+      })
+      .catch(error => {
+        throw new Error(error);
+        done();
+      });
+  });
+});
 
 const tweet = {
   'id_str': '788437701145931776',
@@ -11,8 +53,8 @@ const tweet = {
   'username': 'SonglinkTweeter'
 };
 
-describe('postResponse', () => {
-  before(() => {
+describe('postResponseTweet', () => {
+  beforeEach(() => {
     nock('http://www.songl.ink')
       .post('/create', {
         'source': 'spotify',
@@ -27,9 +69,8 @@ describe('postResponse', () => {
         'source_id': '6DxT6qWd8P7ZOP5p4urTfv',
         'title': 'Stardust' }
       );
-
-    nock('https://api.twitter.com/1.1/statuses')
-      .post('/update.json')
+    nock('https://api.twitter.com/1.1')
+      .post('/statuses/update.json')
       .query({
         'in_reply_to_status_id': tweet.id_str,
         'status': `@${ tweet.username } share this track with all your friends with Songlink http://songl.ink/27b7f`
@@ -106,17 +147,18 @@ describe('postResponse', () => {
       );
 
   });
-  after(() => {
+  afterEach(() => {
     nock.restore();
   });
 
   it ('should post a response to a tweet', (done) => {
-    postResponse(tweet)
+    postResponseTweet(tweet)
     .then(data => {
       expect(data.created_at).to.exist;
       done();
     })
     .catch(error => {
+      console.log(data);
       expect(error).to.not.exist;
       done();
     });
