@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const Tweet = require('../db/db').Tweet;
-const enqueueTweet = require('../streamHelpers').enqueueTweet;
-const validSpotifyUrl = require('../streamHelpers').validSpotifyUrl;
+const enqueueTweet = require('../helpers/streamHelpers').enqueueTweet;
+const validSpotifyUrl = require('../helpers/streamHelpers').validSpotifyUrl;
 
 describe('Queueing tweets', () => {
 
