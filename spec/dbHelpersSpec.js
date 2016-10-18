@@ -1,10 +1,11 @@
 const expect = require('chai').expect;
+const Sequelize = require('sequelize');
 const Tweet = require('../db/db').Tweet;
-const enqueueTweet = require('../helpers/streamHelpers').enqueueTweet;
-const validSpotifyUrl = require('../helpers/streamHelpers').validSpotifyUrl;
+const getQueuedTweetsAndEmptyQueue = require('../helpers/dbHelpers').getQueuedTweetsAndEmptyQueue;
+const enqueueTweet = require('../helpers/dbHelpers').enqueueTweet;
+
 
 describe('Queueing tweets', () => {
-
   afterEach((done) => {
     // destory tweets made during tests
     Tweet.destroy(
@@ -21,7 +22,7 @@ describe('Queueing tweets', () => {
     });
   });
 
-  it ('Should not queue tweets with valid Spotify URLs', function(done) {
+  it('Should not queue tweets with valid Spotify URLs', function(done) {
     /* eslint-disable */
     const tweet =
       {
@@ -208,13 +209,62 @@ describe('Queueing tweets', () => {
   });
 });
 
-describe('validSpotifyUrl', function() {
-  it('should return false for invalid URLs', function() {
-    const url = 'https://twitter.com/spotifyuk/status/788001646089428992';
-    expect(validSpotifyUrl(url)).to.equal(false);
+
+describe('getQueuedTweetsAndEmptyQueue', () => {
+  beforeEach(done => {
+    const tweets = [
+      {
+        'id_str': '788437701145931776',
+        'song_url': 'https://open.spotify.com/track/20Qg2T8o4dobtSmyqxmx5n',
+        'username': 'artsniaIl'
+      },
+      {
+        'id_str': '788166670640680961',
+        'song_url': 'https://open.spotify.com/track/6DxT6qWd8P7ZOP5p4urTfv',
+        'username': 'RealDonaldTrump'
+      },
+      {
+        'id_str': '788169506648645632',
+        'song_url': 'https://open.spotify.com/track/0DD5UGpW3TBBpEs0wNbVJk',
+        'username': 'Jack'
+      }
+    ];
+    const promises = [];
+    tweets.forEach(tweet => {
+      promises.push(Tweet.create(tweet));
+    });
+    Sequelize.Promise.all(promises)
+    .then(() => {
+      done();
+    });
   });
-  it('should return true for valid URLs', function() {
-    const url = 'https://open.spotify.com/track/20Qg2T8o4dobtSmyqxmx5n';
-    expect(validSpotifyUrl(url)).to.equal(true);
+
+  afterEach(done => {
+    Tweet.destroy({where: {}})
+    .then(() => {
+      done();
+    });
   });
+
+  it('should return all the tweets in the queue', done => {
+    getQueuedTweetsAndEmptyQueue()
+      .then(tweets => {
+        expect(tweets.length).to.equal(3);
+        expect(tweets[0].id_str).to.equal('788437701145931776');
+        done();
+      });
+  });
+
+  it('should empty the queue when finished', done => {
+    getQueuedTweetsAndEmptyQueue()
+      .then(() => {
+        Tweet.findAll()
+          .then(tweets => {
+            expect(tweets.length).to.equal(0);
+            done();
+          });
+      });
+  });
+
+
 });

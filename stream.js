@@ -1,4 +1,4 @@
-const enqueueTweet = require('./streamHelpers').enqueueTweet;
+const enqueueTweet = require('./helpers/dbHelpers').enqueueTweet;
 const T = require('./twitter/twitterConnection');
 const winston = require('./util/logger.js');
 

@@ -1,5 +1,9 @@
 const Tweet = require('../db/db').Tweet;
 
+const validSpotifyUrl = function(url) {
+  return /^https:\/\/open\.spotify\.com\/track\/\w+$/.test(url);
+};
+
 const enqueueTweet = function(tweet) {
   if (tweet.retweeted_status) {
     // only enqueue tweets that are not retweets
@@ -7,7 +11,7 @@ const enqueueTweet = function(tweet) {
   }
   // check each URL to see if there is a valid spotify link
   const foundSpotifyUrlIndex = tweet.entities.urls.reduce((foundIndex, url, index) => {
-    if (module.exports.validSpotifyUrl(url.expanded_url)) {
+    if (validSpotifyUrl(url.expanded_url)) {
       return index;
     }
     return foundIndex;
@@ -27,11 +31,22 @@ const enqueueTweet = function(tweet) {
   }
 };
 
-const validSpotifyUrl = function(url) {
-  return /^https:\/\/open\.spotify\.com\/track\/\w+$/.test(url);
+const getQueuedTweetsAndEmptyQueue = () => {
+  return new Promise((resolve, reject) => {
+    Tweet.findAll({raw: true})
+      .then(tweets => {
+        Tweet.destroy({where: {}}).
+        then(() => {
+          resolve(tweets);
+        });
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
 };
 
 module.exports = {
   enqueueTweet,
-  validSpotifyUrl
+  getQueuedTweetsAndEmptyQueue
 };
