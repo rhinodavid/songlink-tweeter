@@ -15,6 +15,7 @@
   "homepage": "https://github.com/rhinodavid/2016-09-mvp#readme",
   "dependencies": {
     "dotenv": "^2.0.0",
+    "request": "^2.75.0",
     "sequelize": "^3.24.4",
     "sqlite3": "^3.1.6",
     "twit": "^2.2.5",
