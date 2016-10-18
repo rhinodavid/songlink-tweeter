@@ -1,4 +1,4 @@
-const Tweet = require('./db/db').Tweet;
+const Tweet = require('../db/db').Tweet;
 
 const enqueueTweet = function(tweet) {
   if (tweet.retweeted_status) {
