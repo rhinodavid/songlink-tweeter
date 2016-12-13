@@ -6,11 +6,11 @@ winston.add(
     level: 'info',
     json: false,
     eol: '\n',
-    timestamp: true
+    timestamp: true,
   }
 );
 
 winston.remove(winston.transports.Console);
-winston.add(winston.transports.Console, {timestamp: true});
+winston.add(winston.transports.Console, { timestamp: true });
 
 module.exports = winston;
