@@ -15,6 +15,8 @@ const Tweet = db.define('Tweet', {
   },
   song_url: Sequelize.STRING,
   username: Sequelize.STRING,
+  user_followers_count: Sequelize.INTEGER,
+  user_verified: Sequelize.BOOLEAN,
 });
 
 const ConfigItem = db.define('ConfigItem', {
