@@ -8,7 +8,7 @@ const stream = T.stream('statuses/filter', {
 });
 
 stream.on('connected', () => {
-  winston.log('info', 'Connected to statuses stream');
+  winston.info('Connected to statuses stream');
 });
 
 stream.on('tweet', (tweet) => {
@@ -16,17 +16,17 @@ stream.on('tweet', (tweet) => {
 });
 
 stream.on('error', (error) => {
-  winston.log('error', 'Stream error:');
-  winston.log('error', 'Message:', error.message);
-  winston.log('error', 'Status code:', error.statusCode);
+  winston.error('Stream error:');
+  winston.error('Message:', error.message);
+  winston.error('Status code:', error.statusCode);
 });
 
 stream.on('disconnect', (disconnectMessage) => {
-  winston.log('info', 'Disconnected with message:', disconnectMessage);
+  winston.info('Disconnected with message:', disconnectMessage);
 });
 
 stream.on('limit', (limitMessage) => {
-  winston.log('error', 'Rate limited with message:', limitMessage);
+  winston.error('Rate limited with message:', limitMessage);
 });
 
 module.exports = stream;
