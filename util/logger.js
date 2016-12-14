@@ -7,7 +7,7 @@ module.exports = new (winston.Logger)({
       colorize: true,
     }),
     new (winston.transports.File)({
-      filename: path.join(__dirname, 'sltweeter.log'),
+      filename: path.join(__dirname, '../sltweeter.log'),
       colorize: false,
       json: false,
     }),
