@@ -5,6 +5,7 @@ const validSpotifyUrl = function validSpotifyUrl(url) {
 };
 
 const enqueueTweet = function enqueueTweet(tweet) {
+  console.log(tweet);
   if (tweet.retweeted_status) {
     // only enqueue tweets that are not retweets
     return new Promise(resolve => resolve(null));
