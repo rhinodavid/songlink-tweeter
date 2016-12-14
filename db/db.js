@@ -1,9 +1,10 @@
 const Sequelize = require('sequelize');
+const path = require('path');
 
 const db = new Sequelize('sltweeter', 'user', null,
   {
     dialect: 'sqlite',
-    storage: './db/sltweeter.sqlite',
+    storage: path.join(__dirname, 'sltweeter.sqlite'),
     logging: false,
   });
 
