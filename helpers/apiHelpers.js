@@ -40,7 +40,6 @@ const postResponseTweet = function postResponseTweet(tweet) {
           status: `@${tweet.get('username')} share this track with all your friends with Songlink ${songlinkUrl}`,
         };
         T.post('statuses/update', replyTweet, (error, data, response) => {
-          console.log(response.toJSON());
           if (error) {
             winston.log('error', 'Error posting reply tweet');
             winston.log('error', 'Tweet:', tweet);
