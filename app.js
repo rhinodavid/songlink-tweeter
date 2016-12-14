@@ -1,5 +1,4 @@
 // Begin enqueing tweets from the twitter stream
-console.log('starting app..');
 require('./stream');
 
 const tweeter = require('./tweeter');
