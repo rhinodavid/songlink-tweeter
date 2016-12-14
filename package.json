@@ -10,11 +10,18 @@
     "type": "git",
     "url": "git+https://github.com/rhinodavid/2016-09-mvp.git"
   },
+  "eslintConfig": {
+    "env": {
+      "mocha": true
+    }
+  },
   "author": "David Walsh",
   "license": "ISC",
   "homepage": "https://github.com/rhinodavid/2016-09-mvp#readme",
   "dependencies": {
+    "chai": "^3.5.0",
     "dotenv": "^2.0.0",
+    "nock": "^8.1.0",
     "request": "^2.75.0",
     "sequelize": "^3.24.4",
     "sqlite3": "^3.1.6",
