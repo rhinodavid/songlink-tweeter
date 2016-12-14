@@ -4,11 +4,11 @@
   "description": "Songlink Twitter Bot",
   "main": "app.js",
   "scripts": {
-    "test": ""
+    "test": "mocha spec"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rhinodavid/2016-09-mvp.git"
+    "url": "git+https://github.com/rhinodavid/songlink-tweeter.git"
   },
   "eslintConfig": {
     "env": {
@@ -17,7 +17,7 @@
   },
   "author": "David Walsh",
   "license": "ISC",
-  "homepage": "https://github.com/rhinodavid/2016-09-mvp#readme",
+  "homepage": "https://github.com/rhinodavid/songlink-tweeter#readme",
   "dependencies": {
     "chai": "^3.5.0",
     "dotenv": "^2.0.0",
@@ -26,11 +26,9 @@
     "sequelize": "^3.24.4",
     "sqlite3": "^3.1.6",
     "twit": "^2.2.5",
-    "winston": "^2.2.0"
+    "winston": "^2.3.0"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
     "mocha": "^3.1.2",
-    "nock": "^8.1.0"
   }
 }
