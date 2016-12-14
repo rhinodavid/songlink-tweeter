@@ -2,7 +2,7 @@ const winston = require('winston');
 
 winston.add(
   winston.transports.File, {
-    filename: 'stream.log',
+    filename: 'sltweeter.log',
     level: 'info',
     json: false,
     eol: '\n',
