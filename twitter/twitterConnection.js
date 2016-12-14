@@ -1,5 +1,8 @@
 const Twit = require('twit');
-require('dotenv').load();
+const path = require('path');
+require('dotenv').load({
+  path: path.join(__dirname, '../.env'),
+});
 
 const T = new Twit({
   consumer_key: process.env.TWITTER_CONSUMER_KEY, // eslint-disable-line
