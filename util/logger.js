@@ -1,16 +1,15 @@
 const winston = require('winston');
+const path = require('path');
 
-winston.add(
-  winston.transports.File, {
-    filename: 'sltweeter.log',
-    level: 'info',
-    json: false,
-    eol: '\n',
-    timestamp: true,
-  }
-);
-
-winston.remove(winston.transports.Console);
-winston.add(winston.transports.Console, { timestamp: true });
-
-module.exports = winston;
+module.exports = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({
+      colorize: true,
+    }),
+    new (winston.transports.File)({
+      filename: path.join(__dirname, 'sltweeter.log'),
+      colorize: false,
+      json: false,
+    }),
+  ],
+});
