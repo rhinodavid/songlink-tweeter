@@ -1,24 +1,25 @@
 const request = require('request');
 const winston = require('../util/logger');
+const ConfigItem = require('../db/db').ConfigItem;
 const T = require('../twitter/twitterConnection');
 
-const getSpotifyId = url => {
+const getSpotifyId = function getSpotifyId(url) {
   return url.match(/^https:\/\/open\.spotify\.com\/track\/(\w+)$/)[1];
 };
 
-const getSonglinkForSpotify = spotifyId => {
+const getSonglinkForSpotify = function getSonglinkForSpotify(spotifyId) {
   return new Promise((resolve, reject) => {
-    const songlinkRequst = request({
+    request({
       method: 'POST',
       url: 'http://www.songl.ink/create',
       headers: {
-        contentType: 'application/json'
+        contentType: 'application/json',
       },
       json: true,
       body: {
         source: 'spotify',
-        'source_id': spotifyId
-      }
+        source_id: spotifyId,
+      },
     }, (error, response, body) => {
       if (error) {
         reject(error);
@@ -29,34 +30,80 @@ const getSonglinkForSpotify = spotifyId => {
   });
 };
 
-const postResponseTweet = tweet => {
+const postResponseTweet = function postResponseTweet(tweet) {
   return new Promise((resolve, reject) => {
-    getSonglinkForSpotify(getSpotifyId(tweet.song_url))
-      .then(songlink => {
+    getSonglinkForSpotify(getSpotifyId(tweet.get('song_url')))
+      .then((songlink) => {
         const songlinkUrl = songlink.share_link;
         const replyTweet = {
-          'in_reply_to_status_id': tweet.id_str,
-          'status': `@${ tweet.username } share this track with all your friends with Songlink ${ songlinkUrl }`
+          in_reply_to_status_id: tweet.get('id_str'),
+          status: `@${tweet.get('username')} share this track with all your friends with Songlink ${songlinkUrl}`,
         };
         T.post('statuses/update', replyTweet, (error, data, response) => {
+          console.log(response.toJSON());
           if (error) {
             winston.log('error', 'Error posting reply tweet');
             winston.log('error', 'Tweet:', tweet);
             winston.log('error', 'Twitter error:', error);
             reject(error);
+          } else {
+            resolve(data);
           }
-          resolve(data);
         });
       })
-      .catch(err => {
-        winston.log('error', 'Error getting Songlink data\n', err);
-        resolve(err);
+      .catch((error) => {
+        winston.error('Error getting Songlink data:', error);
+        reject(error);
       });
   });
+};
+
+const getMentions = function getMentions(sinceId) {
+  return new Promise((resolve, reject) => {
+    const options = sinceId ? { since_id: sinceId } : {};
+    T.get('statuses/mentions_timeline', options, (error, data, response) => {
+      if (error) {
+        winston.log('error', 'Error getting mentions\n', error);
+        reject(error);
+      }
+      if (data.length) {
+        // found mentions, update the last mention id
+        const lastIdString = data[data.length - 1].id_str;
+        ConfigItem.findOrCreate({
+          where: {
+            key: 'lastMentionId',
+          },
+        })
+        .then(() => {
+          ConfigItem.update(
+            {
+              value: lastIdString,
+            },
+            {
+              where: {
+                key: 'lastMentionId',
+              },
+            });
+        });
+      }
+      resolve(data);
+    });
+  });
+};
+
+const getLatestMentions = function getLatestMentions() {
+  return ConfigItem.findOne({
+    where: {
+      key: 'lastMentionId',
+    },
+  })
+  .then(configItem => getMentions(configItem.get('value')));
 };
 
 module.exports = {
   getSpotifyId,
   getSonglinkForSpotify,
-  postResponseTweet
+  postResponseTweet,
+  getMentions,
+  getLatestMentions,
 };
