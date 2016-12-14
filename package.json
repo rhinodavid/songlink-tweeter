@@ -29,6 +29,6 @@
     "winston": "^2.3.0"
   },
   "devDependencies": {
-    "mocha": "^3.1.2",
+    "mocha": "^3.1.2"
   }
 }
