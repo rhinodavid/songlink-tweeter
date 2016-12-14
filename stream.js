@@ -29,9 +29,4 @@ stream.on('limit', (limitMessage) => {
   winston.error('Rate limited with message:', limitMessage);
 });
 
-setTimeout(() => {
-  winston.info('stopping stream');
-  stream.stop();
-}, 8000);
-
 module.exports = stream;
