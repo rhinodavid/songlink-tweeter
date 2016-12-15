@@ -30,6 +30,14 @@ const getSonglinkForSpotify = function getSonglinkForSpotify(spotifyId) {
   });
 };
 
+const generateTweetText = function generateTweetText(username, songlinkUrl) {
+  const messages = [
+    `@${username} share this track with all your friends with Songlink ${songlinkUrl}`,
+    `Songlink lets your friends on any music service hear this song. @${username} check it out... ${songlinkUrl}`,
+  ];
+  return messages[Math.floor(Math.random() * messages.length)];
+};
+
 const postResponseTweet = function postResponseTweet(tweet) {
   return new Promise((resolve, reject) => {
     getSonglinkForSpotify(getSpotifyId(tweet.get('song_url')))
@@ -37,7 +45,7 @@ const postResponseTweet = function postResponseTweet(tweet) {
         const songlinkUrl = songlink.share_link;
         const replyTweet = {
           in_reply_to_status_id: tweet.get('id_str'),
-          status: `@${tweet.get('username')} share this track with all your friends with Songlink ${songlinkUrl}`,
+          status: generateTweetText(tweet.get('username'), songlinkUrl),
         };
         T.post('statuses/update', replyTweet, (error, data, response) => {
           if (error) {
